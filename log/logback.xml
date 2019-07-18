@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false" scan="true" scanPeriod="300 second">
-    <property name="APP_NAME" value="application"/>
-    <property name="LOG_PATH" value="E:/temp/${APP_NAME}-log"/>
-    <property name="FILE_SIZE" value="50MB"/>
-    <property name="MAX_HISTORY" value="100"/>
-    <property name="DATE_PATTERN" value="yyyy-MM-dd HH:mm:ss.SSS"/>
-    <property name="LOG_PATTERN"
-              value="%d{${DATE_PATTERN}} [%-5level] [%15.15t] %-40.40logger{39}:%L - %m%n"/>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
-        </encoder>
-    </appender>
-    <appender name="ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
-        </encoder>
-        <File>${LOG_PATH}/all.log</File>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM}/all.%d{dd}-%i.log</fileNamePattern>
-            <maxHistory>${MAX_HISTORY}</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy
-                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>${FILE_SIZE}</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
-    </appender>
-    <logger name="com.example" level="DEBUG"/>
-    <root level="WARN">
-        <appender-ref ref="STDOUT"/>
-        <appender-ref ref="ALL"/>
-    </root>
+  <property name="LOG_HOME" value="E:/temp/schedule-log" />
+  <property name="FILE_SIZE" value="10MB" />
+  <property name="MAX_HISTORY" value="100" />
+  <property name="DATE_PATTERN" value="yyyy-MM-dd HH:mm:ss.SSS" />
+  <property name="LOG_PATTERN" value="%d{DATE_PATTERN} [%-5level] [%t] %logger:%line - %m%n" />
+  <!-- 控制台输出 -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${LOG_PATTERN}</pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+  </appender>
+  <!-- 按照每天生成日志文件 -->
+  <appender name="ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <FileNamePattern>${LOG_PATH}/%d{yyyy-MM}/all.%d{dd}.log</FileNamePattern>
+      <MaxHistory>30</MaxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>${LOG_PATTERN}</pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <MaxFileSize>${MAX_HISTORY}</MaxFileSize>
+    </triggeringPolicy>
+  </appender>
+  <logger name="com.example" level="DEBUG" />
+  <root level="WARN">
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="ALL" />
+  </root>
 </configuration>
